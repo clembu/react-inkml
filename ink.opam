@@ -1,0 +1,18 @@
+opam-version: "2.0"
+name: "ink"
+version: "0.0.0"
+synopsis: "Functional reactive story engine"
+description: """
+Functional reactive interface to stories written in Inkle's Ink format
+"""
+maintainer: "Clement Busschaert <clement.busschaert@gmail.com>"
+authors: "Clement Busschaert <clement.busschaert@gmail.com>"
+license: "MIT"
+homepage: "https://github.com/facelesspanda/react-inkml"
+bug-reports: "https://github.com/facelesspanda/react-inkml/issues"
+dev-repo: ""
+depends: [ "ocaml" "ocamlfind" "dune" ]
+build: [
+  ["dune" "subst"] {pinned}
+  ["dune" "build" "-p" name "-j" jobs]
+]
