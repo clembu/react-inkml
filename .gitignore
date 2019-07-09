@@ -11,6 +11,12 @@
 # ocamlbuild working directory
 _build/
 
+# local opam switch
+_opam/
+
+# Dune generated files
+*.install
+
 # ocamlbuild targets
 *.byte
 *.native
