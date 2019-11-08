@@ -1,8 +1,9 @@
 # Frontend to dune.
 
 ENV = opam config exec --
+SYNTAX_FILE = inkc/lib/syntax
 
-.PHONY: default build install uninstall test clean
+.PHONY: default build install uninstall test doc syntax-errors clean
 
 default: build
 
@@ -17,6 +18,12 @@ install:
 
 uninstall:
 	${ENV} dune uninstall
+
+doc:
+	${ENV} dune build @doc
+
+syntax-errors:
+	${ENV} menhir --list-errors ${SYNTAX_FILE}.mly >> ${SYNTAX_FILE}.messages
 
 clean:
 	${ENV} dune clean

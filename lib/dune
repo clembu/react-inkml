@@ -1,0 +1,4 @@
+(library
+ (name ink)
+ (public_name ink.lib)
+ (libraries react))

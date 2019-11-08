@@ -1,0 +1,8 @@
+{0:react-ink Reactive Ink in Ocaml}
+{1:intro The Ink Language}
+
+{{:https://www.inklestudios.com/ink/}Ink} is a programming language designed by {{:https://www.inklestudios.com/}Inklestudios}.
+
+{1:indexes Indexes}
+{2:indexmodules Modules}
+{!modules: Ink}

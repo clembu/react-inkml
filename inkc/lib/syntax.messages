@@ -1,0 +1,51 @@
+idents: LSQUARE IDENT COLON RSQUARE
+##
+## Ends in an error in state: 8.
+##
+## separated_nonempty_list(COLON,ident) -> ident COLON . separated_nonempty_list(COLON,ident) [ RSQUARE ]
+##
+## The known suffix of the stack is as follows:
+## ident COLON
+##
+
+Illegal trailing separator.
+
+idents: LSQUARE IDENT LSQUARE
+##
+## Ends in an error in state: 7.
+##
+## separated_nonempty_list(COLON,ident) -> ident . [ RSQUARE ]
+## separated_nonempty_list(COLON,ident) -> ident . COLON separated_nonempty_list(COLON,ident) [ RSQUARE ]
+##
+## The known suffix of the stack is as follows:
+## ident
+##
+idents: LSQUARE LSQUARE
+##
+## Ends in an error in state: 1.
+##
+## idents -> LSQUARE . loption(separated_nonempty_list(COLON,ident)) RSQUARE EOF [ # ]
+##
+## The known suffix of the stack is as follows:
+## LSQUARE
+##
+idents: LSQUARE RSQUARE RSQUARE
+##
+## Ends in an error in state: 5.
+##
+## idents -> LSQUARE loption(separated_nonempty_list(COLON,ident)) RSQUARE . EOF [ # ]
+##
+## The known suffix of the stack is as follows:
+## LSQUARE loption(separated_nonempty_list(COLON,ident)) RSQUARE
+##
+idents: RSQUARE
+##
+## Ends in an error in state: 0.
+##
+## idents' -> . idents [ # ]
+##
+## The known suffix of the stack is as follows:
+##
+##
+
+Unmatched brackets

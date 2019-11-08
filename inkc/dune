@@ -1,0 +1,5 @@
+(executable
+ (name main)
+ (package ink)
+ (public_name inkc)
+ (libraries ink.compiler compiler-libs.common cmdliner))

@@ -1,0 +1,13 @@
+(menhir (modules syntax)
+ (flags --table ))
+
+(rule
+ (target syntax_error.ml)
+ (deps syntax.messages syntax.mly)
+ (action (with-stdout-to %{target} (run menhir --compile-errors %{deps}))))
+
+(library
+ (name inkc)
+ (public_name ink.compiler)
+ (preprocess (pps sedlex.ppx))
+ (libraries ink.lib compiler-libs.common sedlex menhirLib fp-syntax))

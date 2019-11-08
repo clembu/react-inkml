@@ -1,0 +1,91 @@
+open Angstrom
+
+let ( let>+ ) p f = p >>= f
+
+let ( let|+ ) p f = p >>| f
+
+exception Unimplemented
+
+let return_unit = return ()
+
+module Char_p = struct
+  let ws = function ' ' | '\t' -> true | _ -> false
+
+  let any_space = function ' ' | '\t' | '\r' | '\n' -> true | _ -> false
+
+  let dot = function '.' -> true | _ -> false
+
+  let arrow_char = function '-' | '>' | '<' -> true | _ -> false
+
+  let op_char c = arrow_char c || dot c
+
+  let id_char c = not (any_space c || op_char c)
+end
+
+module Txt = struct
+  let ws = take_while Char_p.ws *> return_unit <?> "WS0"
+
+  let ws1 = take_while1 Char_p.ws *> return_unit <?> "WS1"
+
+  let nl = end_of_line <?> "EOL"
+end
+
+module Tok = struct
+  let arrow_r = string "->" <?> "->"
+
+  let arrow_l = string "<-" <?> "<-"
+
+  let identifier = take_while1 Char_p.id_char <?> "Identifier"
+end
+
+module KW = struct
+  let kw s = string s <?> s
+
+  let _include = kw "INCLUDE"
+
+  let _done = kw "DONE"
+
+  let _end = kw "END"
+
+  let _return = kw "return"
+
+  let _var = kw "VAR"
+
+  let _tmp = kw "temp"
+
+  let _const = kw "CONST"
+
+  let _else = kw "else"
+
+  let _fun = kw "function"
+
+  let _list = kw "LIST"
+end
+
+module Lex = struct
+  let divert_to p = Tok.arrow_r *> Txt.ws *> p <?> "Divert"
+
+  let _done = divert_to KW._done
+
+  let _end = divert_to KW._end
+end
+
+let everything = Tok.identifier <* (Lex._done <* end_of_input)
+
+let parse_lines ic =
+  let rec feed_line s =
+    let line =
+      try Ok (`String (input_line ic)) with
+      | End_of_file -> Ok `Eof
+      | Sys_error s -> Error (`SysError s)
+    in
+    match Result.map (Buffered.feed s) line with
+    | Ok (Buffered.Partial _ as s) -> feed_line s
+    | Ok (Buffered.Done (_, r)) -> Ok r
+    | Ok (Buffered.Fail _ as s) -> (
+      match Buffered.state_to_result s with
+      | Error msg -> Error (`ParseError msg)
+      | _ -> assert false )
+    | Error e -> Error e
+  in
+  feed_line @@ Buffered.parse everything
